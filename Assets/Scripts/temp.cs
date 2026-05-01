@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class temp : MonoBehaviour
 {
@@ -13,7 +14,12 @@ public class temp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        
+    }
+
+    public void OnAttack(InputValue input)
+    {
+        if (input.isPressed)
         {
             GameObject particleInstance = Instantiate(particlePrefab, transform.position, transform.rotation);
             particleInstance.GetComponent<ParticleSystem>().Play();
