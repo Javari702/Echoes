@@ -1,4 +1,3 @@
-using Oculus.Platform;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,23 +6,25 @@ public class SwingProtocol : MonoBehaviour
     [SerializeField] Transform swingHand;
     [SerializeField] Rigidbody _playerRb;
     [SerializeField] float maxWebShootDistance;
-    [SerializeField] float jointSpring;
+    [SerializeField] float springStrength;
     [SerializeField] float jointDamper;
     [SerializeField] float jointMassScale;
+    [SerializeField] float _pointOffset;
     [SerializeField] Transform swingPointVisual;
     [SerializeField] InputActionProperty swingAction;
     [SerializeField] InputActionProperty pullAction;
     [SerializeField] float pullStrength;
     [SerializeField] LineRenderer line; 
 
-    private Vector3 swingPoint; 
+    private Vector3 anchorPoint; 
     private SpringJoint joint;
     private bool hasHit;
+    private RaycastHit hit;
 
 
     void Update()
     {
-        ShowSwingPoint();
+        ShowAnchorPoint();
 
         HandleSwing();
 
@@ -39,7 +40,7 @@ public class SwingProtocol : MonoBehaviour
         if (swingAction.action.WasReleasedThisFrame()) StopSwing();
     }
 
-    private void ShowSwingPoint()
+    private void ShowAnchorPoint()
     {
         swingPointVisual.gameObject.SetActive(false);
 
@@ -48,16 +49,17 @@ public class SwingProtocol : MonoBehaviour
             return;
         }
 
-        RaycastHit hit;
         hasHit = Physics.Raycast(swingHand.position, swingHand.forward, out hit, maxWebShootDistance, LayerMask.GetMask("Default"));
+        Vector3 anchorOffset = hit.normal * _pointOffset;
 
         if (hasHit)
         {
-            swingPoint = hit.point;
+            anchorPoint = hit.point + anchorOffset;
             swingPointVisual.gameObject.SetActive(true);
-            swingPointVisual.position = swingPoint;
+            swingPointVisual.position = hit.point;
         }
     }
+
 
     private void StartSwing()
     {
@@ -65,13 +67,13 @@ public class SwingProtocol : MonoBehaviour
 
         joint = _playerRb.gameObject.AddComponent<SpringJoint>();
         joint.autoConfigureConnectedAnchor = false;
-        joint.connectedAnchor = swingPoint;
+        joint.connectedAnchor = anchorPoint;
 
-        float maxDistance = Vector3.Distance(_playerRb.position, swingPoint);
+        float maxDistance = Vector3.Distance(_playerRb.position, anchorPoint);
         joint.minDistance = 0;
         joint.maxDistance = maxDistance * 0.8f;
 
-        joint.spring = jointSpring;
+        joint.spring = springStrength;
         joint.damper = jointDamper;
         joint.massScale = jointMassScale;
     }
@@ -92,7 +94,7 @@ public class SwingProtocol : MonoBehaviour
         line.enabled = true;
         line.positionCount = 2;
         line.SetPosition(0, swingHand.position);
-        line.SetPosition(1, swingPoint);
+        line.SetPosition(1, hit.point);
     }
 
     private void PullWeb()
@@ -101,10 +103,10 @@ public class SwingProtocol : MonoBehaviour
         {
             if (!joint) return;
 
-            Vector3 direction = (swingPoint - swingHand.position).normalized;
+            Vector3 direction = (anchorPoint - swingHand.position).normalized;
             _playerRb.AddForce(direction * pullStrength * Time.deltaTime);
 
-            float maxDistance = Vector3.Distance(_playerRb.position, swingPoint);
+            float maxDistance = Vector3.Distance(_playerRb.position, anchorPoint);
             joint.minDistance = 0;
             joint.maxDistance = maxDistance * 0.8f;
         }

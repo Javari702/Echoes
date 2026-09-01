@@ -94,7 +94,7 @@ Material:
     - NormalSpeed: 0.1
     - NormalStrength: 0.199
     - NormalTiling: 40
-    - WaveIntensity: 0.5
+    - WaveIntensity: 0.2
     - WaveScale: 100
     - WaveSpeed: 500
     - _AddPrecomputedVelocity: 0
@@ -158,15 +158,16 @@ Material:
     - _Wave_Intensity: 0.2
     - _Wave_Scale: 100
     - _Wave_Speed: 500
+    - _XRMotionVectorsPass: 1
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - DeepColor: {r: 0.9333334, g: 0.28235295, b: 0.62352943, a: 1}
+    - DeepColor: {r: 0.18013522, g: 0.4924714, b: 0.8301887, a: 1}
     - FlareColor: {r: 0.41568625, g: 0.41568625, b: 0.41568625, a: 1}
     - FoamColor: {r: 1, g: 1, b: 1, a: 0.8509804}
-    - ShallowColor: {r: 0, g: 0, b: 0, a: 1}
+    - ShallowColor: {r: 0.14150932, g: 0.9341806, b: 1, a: 0.56078434}
     - _Deep_Color: {r: 0, g: 0.6811693, b: 0.7921569, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

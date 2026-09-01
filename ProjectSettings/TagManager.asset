@@ -7,6 +7,33 @@ TagManager:
   - Building
   - Floor
   - Enemy
+  - QDSUIPrimaryButton
+  - QDSUITextSecondaryInvertedColor
+  - QDSUIAccentColor
+  - QDSUITextInvertedColor
+  - QDSUISecondaryButton
+  - QDSUIIcon
+  - QDSUIDestructiveButton
+  - QDSUISharedThemeColor
+  - QDSUIBorderlessButton
+  - QDSUIBackplate
+  - QDSUIBackplateGradient
+  - QDSUIToggleButton
+  - QDSUITextSecondaryColor
+  - QDSUITooltip
+  - QDSUIToggleBorderlessButton
+  - QDSUISection
+  - QDSUILineDrawing
+  - QDSUITextInputField
+  - SamplesInfoPanel
+  - QDSUIToggleThumbnail
+  - QDSUIToggleSwitch
+  - QDSUIToggleCheckboxRadio
+  - Locomotion
+  - PassThroughButton
+  - LocoButton
+  - LocoText
+  - PassThrough
   layers:
   - Default
   - TransparentFX
