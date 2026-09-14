@@ -16,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
     private float recievedLookInput;
     private CapsuleCollider _playerCollider;
 
+    void OnEnable() => moveInput.action.performed += OnMove;
+    void OnDisable() => moveInput.action.performed -= OnMove;
+
+
     void Awake()
     {
         _playerRb = GetComponentInChildren<Rigidbody>();
@@ -25,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        recievedMoveInput = moveInput.action.ReadValue<Vector2>();
+        // recievedMoveInput = moveInput.action.ReadValue<Vector2>();
         recievedLookInput = lookInput.action.ReadValue<Vector2>().x;
     }
 
@@ -54,6 +58,11 @@ public class PlayerMovement : MonoBehaviour
 
             _playerRb.MovePosition(newPositon);
         // }
+    }
+
+    public void OnMove(InputAction.CallbackContext input)
+    {
+        recievedMoveInput = input.ReadValue<Vector2>();
     }
 
     private bool isGrounded()
