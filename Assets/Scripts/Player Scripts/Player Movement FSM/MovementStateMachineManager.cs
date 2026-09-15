@@ -6,18 +6,10 @@ public class MovementStateMachineManager : MonoBehaviour
 {
     // Input References
     [SerializeField] InputActionProperty moveInput;
-    [SerializeField] InputActionProperty lookInput;
 
-
-    // Force Multipliers
-    [SerializeField] float speed;
-    [SerializeField] float sensitivity;
-
-    // Shared Components
-    private Rigidbody _playerRb;
-    private Transform lookDirection;
-    private Vector2 moveInputValue;
-    private float lookInputValue;
+    // Swinging Componenets
+    public SwingHand leftHand;
+    public SwingHand rightHand;
 
     // VR Rig Components
     [SerializeField] float _bodyHeightMin;
@@ -30,57 +22,91 @@ public class MovementStateMachineManager : MonoBehaviour
     private Transform _playerHead;
     private CapsuleCollider _playerCollider;
 
+    // Shared Components
+    public Rigidbody playerRb;
+    public Transform lookDirection;
+    public Vector2 moveInputValue;
+
+    // Multipliers
+    public float speed;
+
+    // Private Global Variables
+    private bool _wasMoving;
+
     // States
-    public MovementAbstractState currentState;
+    public MovementAbstractState CurrentState;
     public IdleState IdleState = new IdleState();
     public GroundMovementState GroundMovementState = new GroundMovementState();
     public SwingingState SwingingState = new SwingingState();
 
     // Context Delegates
-    public event Action<MovementStateMachineManager> OnSwingWebShot;
+    public event Action<MovementStateMachineManager> OnSwingWebStart;
+    public event Action<MovementStateMachineManager> OnSwingWebStop;
+    public event Action<MovementStateMachineManager> OnMovementStart;
+    public event Action<MovementStateMachineManager> OnMovementStop; 
 
     // Input Events
     void OnEnable()
     {
-        moveInput.action.performed += OnMove;
-        lookInput.action.performed += OnLook;
+        moveInput.action.performed += OnMovePerfomred;
+        moveInput.action.canceled += OnMoveCanceled;
     } 
     void OnDisable()
     {
-        moveInput.action.performed -= OnMove;
-        lookInput.action.performed -= OnLook;
+        moveInput.action.performed -= OnMovePerfomred;
+        moveInput.action.canceled -= OnMoveCanceled;
     } 
 
+    // Unity Event Functions
     void Awake()
     {
         _playerHead = GetComponentInChildren<Camera>().transform;
         _playerCollider = GetComponentInChildren<CapsuleCollider>();
+        lookDirection = GetComponentInChildren<Camera>().transform;
+        _playerCollider = GetComponentInChildren<CapsuleCollider>();
+        playerRb = GetComponentInChildren<Rigidbody>();
     }
 
     void Start()
     {
-        currentState = IdleState;
+        CurrentState = IdleState;
 
-        currentState.EnterState(this);
+        CurrentState.EnterState(this);
     }
 
     void Update()
     {
-        currentState.UpdateState(this);
+        CurrentState.UpdateState(this);
+
+        ConditonUpdates();
+
+        leftHand.ShowAnchorPoint(leftHand);
+        rightHand.ShowAnchorPoint(rightHand);
     }
 
     void FixedUpdate()
     {
-        currentState.FixedUpdate(this);  
+        CurrentState.FixedUpdate(this);  
 
         HandleColliderChange();
     }
     
+    // FSM Functions
     public void SwitchState(MovementAbstractState state)
     {
-        state.ExitState(this);
-        currentState = state;
+        CurrentState.ExitState(this);
+        CurrentState = state;
         state.EnterState(this);
+    }
+
+    private void ConditonUpdates()
+    {
+        bool isMoving = moveInputValue.magnitude > 0.01f; 
+
+        if (_wasMoving && !isMoving) OnMovementStop?.Invoke(this);
+        if (!_wasMoving && isMoving) OnMovementStart?.Invoke(this);
+
+        _wasMoving = isMoving;
     }
 
     // VR Rig Functions
@@ -98,14 +124,15 @@ public class MovementStateMachineManager : MonoBehaviour
         _headjoint.targetPosition = _playerHead.localPosition;
     }
 
+
     // Unity Input Callback
-    public void OnMove(InputAction.CallbackContext input)
+    private void OnMovePerfomred(InputAction.CallbackContext input)
     {
         moveInputValue = input.ReadValue<Vector2>();
     }
 
-    public void OnLook(InputAction.CallbackContext input)
+    private void OnMoveCanceled(InputAction.CallbackContext input)
     {
-        lookInputValue = input.ReadValue<Vector2>().x;
-    }
+        moveInputValue = Vector2.zero;
+    } 
 }

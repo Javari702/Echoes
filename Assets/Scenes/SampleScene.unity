@@ -415,6 +415,11 @@ MonoBehaviour:
     m_Reference: {fileID: -3009159214596158414, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pullThreshold: 0.2
   pullForce: 100
+  playerRb: {fileID: 0}
+  pullDistance: 0
+  gestureStarted: 0
+  lastPosition: {x: 0, y: 0, z: 0}
+  gestureStartPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &212645469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1534,6 +1539,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1787917635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &657932313 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7712329808817034277, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+  m_PrefabInstance: {fileID: 863239953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!153 &660276998 stripped
 ConfigurableJoint:
   m_CorrespondingSourceObject: {fileID: 6792402992950892797, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
@@ -1933,6 +1943,11 @@ MonoBehaviour:
     m_Reference: {fileID: -1121338008654915040, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   pullThreshold: 0.2
   pullForce: 100
+  playerRb: {fileID: 0}
+  pullDistance: 0
+  gestureStarted: 0
+  lastPosition: {x: 0, y: 0, z: 0}
+  gestureStartPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &821151353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2038,6 +2053,10 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 1429423796458191181, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: pullUpForce
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429423796458191181, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: _pointOffset
       value: 2
       objectReference: {fileID: 0}
@@ -2064,6 +2083,10 @@ PrefabInstance:
     - target: {fileID: 1429423796458191181, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: pullWebAction.m_Action.m_Name
       value: Pull Web
+      objectReference: {fileID: 0}
+    - target: {fileID: 2565914681307524219, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: speed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2565914681307524219, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_Enabled
@@ -2096,6 +2119,10 @@ PrefabInstance:
     - target: {fileID: 3221072796922974956, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: jointSpring
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3221072796922974956, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: pullUpForce
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3221072796922974956, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: _pointOffset
@@ -2139,15 +2166,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.96179
+      value: 11.4473505
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.137493
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.363781
+      value: -5.1584454
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2187,6 +2214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4163787598710489173, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+    - {fileID: 2565914681307524219, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
     m_RemovedGameObjects:
     - {fileID: 2635177238825785319, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
     m_AddedGameObjects: []
@@ -2194,6 +2222,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 323777532518995551, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1663042051}
+    - targetCorrespondingSourceObject: {fileID: 323777532518995551, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1663042055}
     - targetCorrespondingSourceObject: {fileID: 5957367327955533798, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       insertIndex: -1
       addedObject: {fileID: 794730493}
@@ -4225,6 +4256,11 @@ ConfigurableJoint:
   m_CorrespondingSourceObject: {fileID: 5958399057766580125, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
   m_PrefabInstance: {fileID: 863239953}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1629951397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6344175271530996692, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+  m_PrefabInstance: {fileID: 863239953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1637213430
 GameObject:
   m_ObjectHideFlags: 0
@@ -4366,20 +4402,46 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  lookInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Look Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: cb6d41d3-397f-4f34-a5cb-d2fb785366a5
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -6493913391331992944, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  speed: 10
-  sensitivity: 120
+  leftHand:
+    swingWebInput:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Swing Web Input
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 2d6f7c81-1948-4bfd-b6c9-c90a426c48cb
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    hand: {fileID: 713797110}
+    swingPointVisual: {fileID: 657932313}
+    joint: {fileID: 0}
+    hasHit: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 60
+    pointOffset: 2
+  rightHand:
+    swingWebInput:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Swing Web Input
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: a7761481-0ac8-4bd0-bd74-704f495d3dc1
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    hand: {fileID: 647804381}
+    swingPointVisual: {fileID: 1629951397}
+    joint: {fileID: 0}
+    hasHit: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 60
+    pointOffset: 2
   _bodyHeightMin: 0.5
   _bodyHeightMax: 5
   _leftHand: {fileID: 713797110}
@@ -4387,6 +4449,35 @@ MonoBehaviour:
   _headjoint: {fileID: 1585090818}
   _leftHandJoint: {fileID: 660276998}
   _rightHandJoint: {fileID: 37834556}
+  playerRb: {fileID: 0}
+  lookDirection: {fileID: 0}
+  moveInputValue: {x: 0, y: 0}
+  speed: 5
+--- !u!114 &1663042055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663042047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c418587acfe8a740b18b43969cd5d7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLookControls
+  lookInput:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Look Input
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 100008ac-ba5f-4e9f-9f4f-67faa1ccc30b
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -6493913391331992944, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  sensitivity: 120
 --- !u!1 &1703436306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 666560718845772776, guid: 23940ce75ba7f454bb36016cea473355, type: 3}

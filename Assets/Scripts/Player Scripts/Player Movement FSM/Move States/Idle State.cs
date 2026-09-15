@@ -6,14 +6,16 @@ public class IdleState : MovementAbstractState
     {
         Debug.Log("Entering Idle State"); 
         
-        state.OnSwingWebShot += HandleSwingPressed;
+        state.OnSwingWebStart += HandleSwingPressed;
+        state.OnMovementStart += HandleMovementStart;
     }
 
     public override void ExitState(MovementStateMachineManager state)
     {
         Debug.Log("Exiting Idle State");
 
-        state.OnSwingWebShot -= HandleSwingPressed;
+        state.OnSwingWebStart -= HandleSwingPressed;
+        state.OnMovementStart -= HandleMovementStart;
     }
 
     public override void UpdateState(MovementStateMachineManager state)
@@ -31,8 +33,14 @@ public class IdleState : MovementAbstractState
         
     }
 
+    // Transition Logic
     private void HandleSwingPressed(MovementStateMachineManager state)
     {
         state.SwitchState(state.SwingingState);
+    }
+
+    private void HandleMovementStart(MovementStateMachineManager state)
+    {
+        state.SwitchState(state.GroundMovementState);
     }
 }
