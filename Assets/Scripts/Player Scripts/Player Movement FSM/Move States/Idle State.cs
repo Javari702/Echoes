@@ -34,8 +34,9 @@ public class IdleState : MovementAbstractState
     }
 
     // Transition Logic
-    private void HandleSwingPressed(MovementStateMachineManager state)
+    private void HandleSwingPressed(MovementStateMachineManager state, SwingHand hand)
     {
+        state.pendingHand = hand;
         state.SwitchState(state.SwingingState);
     }
 

@@ -9,10 +9,15 @@ public class SwingHand
     public Transform swingPointVisual;
     public SpringJoint joint;
     public bool hasHit;
+    public bool isSwinging;
     public RaycastHit hit;
     public Vector3 anchorPoint;
     public float maxWebShootDistance;
     public float pointOffset;
+    public LineRenderer line;
+    public float springStrength;
+    public float jointDamper;
+    public float jointMassScale;
 
     public void ShowAnchorPoint(SwingHand swingHand)
     {
@@ -40,5 +45,19 @@ public class SwingHand
             swingHand.swingPointVisual.gameObject.SetActive(true);
             swingHand.swingPointVisual.position = swingHand.hit.point;
         }
-}
+    }
+
+    public void DrawWeb()
+    {
+        if (!joint)
+        {
+            line.enabled = false;
+            return;
+        } 
+
+        line.enabled = true;
+        line.positionCount = 2;
+        line.SetPosition(0, hand.position);
+        line.SetPosition(1, hit.point);
+    }
 }

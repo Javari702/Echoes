@@ -401,25 +401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d2c42c58342f14fa5ea10c3b802cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WebPull
-  pullWebAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Pull Web
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 3b37952a-070b-4400-8fc5-4a351e476b05
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -3009159214596158414, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullThreshold: 0.2
-  pullForce: 100
-  playerRb: {fileID: 0}
-  pullDistance: 0
-  gestureStarted: 0
-  lastPosition: {x: 0, y: 0, z: 0}
-  gestureStartPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &212645469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1929,25 +1910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d2c42c58342f14fa5ea10c3b802cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WebPull
-  pullWebAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Pull Web
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 886c8723-e75c-42f8-a53b-86348eedf2a2
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -1121338008654915040, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullThreshold: 0.2
-  pullForce: 100
-  playerRb: {fileID: 0}
-  pullDistance: 0
-  gestureStarted: 0
-  lastPosition: {x: 0, y: 0, z: 0}
-  gestureStartPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &821151353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2045,6 +2007,10 @@ PrefabInstance:
       value: Physic Rig
       objectReference: {fileID: 0}
     - target: {fileID: 1429423796458191181, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1429423796458191181, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: pullForce
       value: 100
       objectReference: {fileID: 0}
@@ -2110,6 +2076,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3089259782269828640, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3221072796922974956, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3221072796922974956, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
@@ -3252,6 +3222,11 @@ Transform:
   - {fileID: 867014141}
   m_Father: {fileID: 821151354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!120 &1146319387 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 1980999006466032510, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+  m_PrefabInstance: {fileID: 863239953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1172315010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4419,9 +4394,14 @@ MonoBehaviour:
     swingPointVisual: {fileID: 657932313}
     joint: {fileID: 0}
     hasHit: 0
+    isSwinging: 0
     anchorPoint: {x: 0, y: 0, z: 0}
     maxWebShootDistance: 60
     pointOffset: 2
+    line: {fileID: 1146319387}
+    springStrength: 12
+    jointDamper: 7
+    jointMassScale: 4
   rightHand:
     swingWebInput:
       m_UseReference: 1
@@ -4439,9 +4419,39 @@ MonoBehaviour:
     swingPointVisual: {fileID: 1629951397}
     joint: {fileID: 0}
     hasHit: 0
+    isSwinging: 0
     anchorPoint: {x: 0, y: 0, z: 0}
     maxWebShootDistance: 60
     pointOffset: 2
+    line: {fileID: 1694284016}
+    springStrength: 12
+    jointDamper: 7
+    jointMassScale: 4
+  pendingHand:
+    swingWebInput:
+      m_UseReference: 0
+      m_Action:
+        m_Name: 
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 2ca14105-c027-4493-941c-b186a6c92047
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+    hand: {fileID: 0}
+    swingPointVisual: {fileID: 0}
+    joint: {fileID: 0}
+    hasHit: 0
+    isSwinging: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 0
+    pointOffset: 0
+    line: {fileID: 0}
+    springStrength: 0
+    jointDamper: 0
+    jointMassScale: 0
   _bodyHeightMin: 0.5
   _bodyHeightMax: 5
   _leftHand: {fileID: 713797110}
@@ -4478,6 +4488,11 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: -6493913391331992944, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   sensitivity: 120
+--- !u!120 &1694284016 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 328241652987959007, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+  m_PrefabInstance: {fileID: 863239953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1703436306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 666560718845772776, guid: 23940ce75ba7f454bb36016cea473355, type: 3}

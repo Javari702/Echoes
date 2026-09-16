@@ -35,29 +35,19 @@ public class GroundMovementState : MovementAbstractState
 
     private void HandleMovement(MovementStateMachineManager state)
     {
-        // if (isGrounded())
-        // {
-            Quaternion yaw = Quaternion.Euler(0, state.lookDirection.eulerAngles.y, 0);
-            Vector3 targetDirection = yaw * new Vector3(state.moveInputValue.x, 0f, state.moveInputValue.y);
+        Quaternion yaw = Quaternion.Euler(0, state.lookDirection.eulerAngles.y, 0);
+        Vector3 targetDirection = yaw * new Vector3(state.moveInputValue.x, 0f, state.moveInputValue.y);
 
-            Vector3 moveDirection = state.playerRb.position + targetDirection * Time.fixedDeltaTime * state.speed;
+        Vector3 moveDirection = state.playerRb.position + targetDirection * Time.fixedDeltaTime * state.speed;
+        Vector3 newPositon = (moveDirection - state.lookDirection.position) + state.lookDirection.position;
 
-            // Vector3 axis = Vector3.up;
-            // float angle = state.sensitivity * Time.fixedDeltaTime * state.lookInputValue;
-
-            // Quaternion targetTurn = Quaternion.AngleAxis(angle, axis);
-
-            // state.playerRb.MoveRotation(state.playerRb.rotation * targetTurn);
-
-            Vector3 newPositon = (moveDirection - state.lookDirection.position) + state.lookDirection.position;
-
-            state.playerRb.MovePosition(newPositon);
-        // }
+        state.playerRb.MovePosition(newPositon);
     }
      
     // Transition Logic 
-    private void HandleSwingPressed(MovementStateMachineManager state)
+    private void HandleSwingPressed(MovementStateMachineManager state, SwingHand hand)
     {
+        state.pendingHand = hand;
         state.SwitchState(state.SwingingState);
     }
 

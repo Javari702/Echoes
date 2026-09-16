@@ -10,6 +10,7 @@ public class MovementStateMachineManager : MonoBehaviour
     // Swinging Componenets
     public SwingHand leftHand;
     public SwingHand rightHand;
+    public SwingHand pendingHand;
 
     // VR Rig Components
     [SerializeField] float _bodyHeightMin;
@@ -40,21 +41,29 @@ public class MovementStateMachineManager : MonoBehaviour
     public SwingingState SwingingState = new SwingingState();
 
     // Context Delegates
-    public event Action<MovementStateMachineManager> OnSwingWebStart;
-    public event Action<MovementStateMachineManager> OnSwingWebStop;
     public event Action<MovementStateMachineManager> OnMovementStart;
     public event Action<MovementStateMachineManager> OnMovementStop; 
+    public event Action<MovementStateMachineManager, SwingHand> OnSwingWebStart;
+    public event Action<MovementStateMachineManager, SwingHand> OnSwingWebStop;
 
     // Input Events
     void OnEnable()
     {
         moveInput.action.performed += OnMovePerfomred;
         moveInput.action.canceled += OnMoveCanceled;
+        leftHand.swingWebInput.action.performed += ctx => OnSwingPerformed(ctx, leftHand);
+        rightHand.swingWebInput.action.performed += ctx => OnSwingPerformed(ctx, rightHand);
+        leftHand.swingWebInput.action.canceled += ctx => OnSwingPerformed(ctx, leftHand);
+        rightHand.swingWebInput.action.canceled  += ctx => OnSwingPerformed(ctx, rightHand);
     } 
     void OnDisable()
     {
         moveInput.action.performed -= OnMovePerfomred;
         moveInput.action.canceled -= OnMoveCanceled;
+        leftHand.swingWebInput.action.performed -= ctx => OnSwingPerformed(ctx, leftHand);
+        rightHand.swingWebInput.action.performed -= ctx => OnSwingPerformed(ctx, rightHand);
+        leftHand.swingWebInput.action.canceled -= ctx => OnSwingPerformed(ctx, leftHand);
+        rightHand.swingWebInput.action.canceled  -= ctx => OnSwingPerformed(ctx, rightHand);
     } 
 
     // Unity Event Functions
@@ -82,6 +91,7 @@ public class MovementStateMachineManager : MonoBehaviour
 
         leftHand.ShowAnchorPoint(leftHand);
         rightHand.ShowAnchorPoint(rightHand);
+
     }
 
     void FixedUpdate()
@@ -135,4 +145,17 @@ public class MovementStateMachineManager : MonoBehaviour
     {
         moveInputValue = Vector2.zero;
     } 
+
+    private void OnSwingPerformed(InputAction.CallbackContext input, SwingHand hand)
+    {
+        if (input.ReadValueAsButton()) {
+            hand.isSwinging = true;
+            OnSwingWebStart?.Invoke(this, hand);
+        }
+        else
+        {
+            hand.isSwinging = false;
+            OnSwingWebStop?.Invoke(this, hand);
+        }    
+    }
 }
