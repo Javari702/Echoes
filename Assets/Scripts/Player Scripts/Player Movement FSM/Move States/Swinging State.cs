@@ -1,14 +1,15 @@
-using Oculus.Interaction.Input;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwingingState : MovementAbstractState
 {
+    private MovementStateMachineManager manager;
     private SwingHand _firstHand;
     private SwingHand _secondHand;
+    private GestureTracker tracker = new GestureTracker();
 
     public override void EnterState(MovementStateMachineManager state)
     {
+        manager = state;
         Debug.Log("Entering Swinging State");
 
         StartSwing(state, state.pendingHand);
@@ -28,8 +29,19 @@ public class SwingingState : MovementAbstractState
 
     public override void UpdateState(MovementStateMachineManager state)
     {
-        if (_firstHand != null) _firstHand.DrawWeb();
-        if (_secondHand != null) _secondHand.DrawWeb();
+
+        if (_firstHand != null) _firstHand.DrawWeb(_firstHand);
+        if (_secondHand != null) _secondHand.DrawWeb(_secondHand);
+
+        if (_firstHand != null) {
+            tracker.TrackGesture(tracker, _firstHand.controllerPosition, v => v.z, state.pullThreshold, _firstHand, WebYankForward);
+            tracker.TrackGesture(tracker, _firstHand.controllerPosition, v => v.y, state.pullThreshold, _firstHand, WebYankUp);
+        }
+ 
+        if (_secondHand != null) {
+            tracker.TrackGesture(tracker, _secondHand.controllerPosition, v => v.z, state.pullThreshold, _secondHand, WebYankForward);
+            tracker.TrackGesture(tracker, _secondHand.controllerPosition, v => v.y, state.pullThreshold, _secondHand, WebYankUp);
+        }
     }
 
     public override void FixedUpdate(MovementStateMachineManager state)
@@ -68,15 +80,40 @@ public class SwingingState : MovementAbstractState
     private void StopSwing(SwingHand hand)
     {
         if (hand.joint != null) Object.Destroy(hand.joint);
+
+        hand.DrawWebStop();
+
+        if (hand == _firstHand) _firstHand = null;
+        if (hand == _secondHand) _secondHand = null;
     }
+
+    private void WebYankForward(SwingHand hand)
+    {
+        if (!hand.joint) return;
+
+        Vector3 direction = (hand.anchorPoint - manager.playerRb.position).normalized;
+
+        StopSwing(hand); 
+
+        manager.playerRb.linearVelocity = Vector3.zero;
+        manager.playerRb.AddForce(direction * hand.yankForce, ForceMode.VelocityChange);
+    }
+
+    private void WebYankUp(SwingHand hand)
+    {
+        if (!hand.joint) return;
+
+        StopSwing(hand); 
+
+        manager.playerRb.linearVelocity = Vector3.zero;
+        manager.playerRb.AddForce(Vector3.up * hand.yankForce, ForceMode.VelocityChange);
+    }
+
 
     // Transition Logic 
     private void HandleSwingReleased(MovementStateMachineManager state, SwingHand hand)
     {
         StopSwing(hand);
-
-        if (hand == _firstHand) _firstHand = null;
-        if (hand == _secondHand) _secondHand = null;
 
         if (_firstHand == null && _secondHand == null) state.SwitchState(state.IdleState);
     }

@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 public class SwingHand
 {
     public InputActionProperty swingWebInput;
+    public InputActionProperty controllerDelta;
+    public Vector3 controllerPosition;
     public Transform hand;
     public Transform swingPointVisual;
     public SpringJoint joint;
@@ -18,6 +20,7 @@ public class SwingHand
     public float springStrength;
     public float jointDamper;
     public float jointMassScale;
+    public float yankForce;
 
     public void ShowAnchorPoint(SwingHand swingHand)
     {
@@ -47,17 +50,16 @@ public class SwingHand
         }
     }
 
-    public void DrawWeb()
+    public void DrawWeb(SwingHand swingHand)
     {
-        if (!joint)
-        {
-            line.enabled = false;
-            return;
-        } 
-
         line.enabled = true;
         line.positionCount = 2;
-        line.SetPosition(0, hand.position);
+        line.SetPosition(0, swingHand.hand.position);
         line.SetPosition(1, hit.point);
+    }
+
+    public void DrawWebStop()
+    {
+        if (line) line.enabled = false; 
     }
 }

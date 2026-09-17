@@ -4390,6 +4390,19 @@ MonoBehaviour:
         m_SingletonActionBindings: []
         m_Flags: 0
       m_Reference: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerDelta:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Controller Delta
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 6fbb3211-7e5d-4bb9-a027-1182f253a55c
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -1121338008654915040, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerPosition: {x: 0, y: 0, z: 0}
     hand: {fileID: 713797110}
     swingPointVisual: {fileID: 657932313}
     joint: {fileID: 0}
@@ -4402,6 +4415,7 @@ MonoBehaviour:
     springStrength: 12
     jointDamper: 7
     jointMassScale: 4
+    yankForce: 50
   rightHand:
     swingWebInput:
       m_UseReference: 1
@@ -4415,6 +4429,19 @@ MonoBehaviour:
         m_SingletonActionBindings: []
         m_Flags: 0
       m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerDelta:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Controller Delta
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 3845ecbb-d9fe-4d3b-a172-abac28ed0db0
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -3009159214596158414, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerPosition: {x: 0, y: 0, z: 0}
     hand: {fileID: 647804381}
     swingPointVisual: {fileID: 1629951397}
     joint: {fileID: 0}
@@ -4427,6 +4454,7 @@ MonoBehaviour:
     springStrength: 12
     jointDamper: 7
     jointMassScale: 4
+    yankForce: 50
   pendingHand:
     swingWebInput:
       m_UseReference: 0
@@ -4440,6 +4468,19 @@ MonoBehaviour:
         m_SingletonActionBindings: []
         m_Flags: 0
       m_Reference: {fileID: 0}
+    controllerDelta:
+      m_UseReference: 0
+      m_Action:
+        m_Name: 
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 29dab2cc-8712-4471-9042-b184c5a00c51
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+    controllerPosition: {x: 0, y: 0, z: 0}
     hand: {fileID: 0}
     swingPointVisual: {fileID: 0}
     joint: {fileID: 0}
@@ -4452,6 +4493,8 @@ MonoBehaviour:
     springStrength: 0
     jointDamper: 0
     jointMassScale: 0
+    yankForce: 0
+  pullThreshold: 0
   _bodyHeightMin: 0.5
   _bodyHeightMax: 5
   _leftHand: {fileID: 713797110}
