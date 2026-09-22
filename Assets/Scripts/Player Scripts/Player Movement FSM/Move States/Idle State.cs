@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IdleState : MovementAbstractState
@@ -6,7 +7,7 @@ public class IdleState : MovementAbstractState
     {
         Debug.Log("Entering Idle State"); 
         
-        state.OnSwingWebStart += HandleSwingPressed;
+        state.OnTriggerStart += HandleTriggerPressed;
         state.OnMovementStart += HandleMovementStart;
     }
 
@@ -14,7 +15,7 @@ public class IdleState : MovementAbstractState
     {
         Debug.Log("Exiting Idle State");
 
-        state.OnSwingWebStart -= HandleSwingPressed;
+        state.OnTriggerStart -= HandleTriggerPressed;
         state.OnMovementStart -= HandleMovementStart;
     }
 
@@ -34,10 +35,17 @@ public class IdleState : MovementAbstractState
     }
 
     // Transition Logic
-    private void HandleSwingPressed(MovementStateMachineManager state, SwingHand hand)
+    private void HandleTriggerPressed(MovementStateMachineManager state, SwingHand hand)
     {
         state.pendingHand = hand;
-        state.SwitchState(state.SwingingState);
+
+        if (!hand.onWall)
+        {
+            state.SwitchState(state.SwingingState);
+            return;            
+        }
+
+        state.SwitchState(state.ClimbingState);
     }
 
     private void HandleMovementStart(MovementStateMachineManager state)

@@ -5,7 +5,6 @@ public class SwingingState : MovementAbstractState
     private MovementStateMachineManager manager;
     private SwingHand _firstHand;
     private SwingHand _secondHand;
-    private GestureTracker tracker = new GestureTracker();
 
     public override void EnterState(MovementStateMachineManager state)
     {
@@ -15,49 +14,32 @@ public class SwingingState : MovementAbstractState
         StartSwing(state, state.pendingHand);
         _firstHand = state.pendingHand;
 
-        state.OnSwingWebStart += HandleSecondHand;
-        state.OnSwingWebStop += HandleSwingReleased;
+        state.OnTriggerStart += HandleSecondTriggerPessed;
+        state.OnTriggerStop += HandleSwingReleased;
     }
 
     public override void ExitState(MovementStateMachineManager state)
     {
         Debug.Log("Exiting Swinging State");
 
-        state.OnSwingWebStart -= HandleSecondHand;
-        state.OnSwingWebStop -= HandleSwingReleased;
+        state.OnTriggerStart -= HandleSecondTriggerPessed;
+        state.OnTriggerStop -= HandleSwingReleased;
     }
 
     public override void UpdateState(MovementStateMachineManager state)
     {
-
-        if (_firstHand != null) _firstHand.DrawWeb(_firstHand);
-        if (_secondHand != null) _secondHand.DrawWeb(_secondHand);
-
-        if (_firstHand != null) {
-            tracker.TrackGesture(tracker, _firstHand.controllerPosition, v => v.z, state.pullThreshold, _firstHand, WebYankForward);
-            tracker.TrackGesture(tracker, _firstHand.controllerPosition, v => v.y, state.pullThreshold, _firstHand, WebYankUp);
-        }
- 
-        if (_secondHand != null) {
-            tracker.TrackGesture(tracker, _secondHand.controllerPosition, v => v.z, state.pullThreshold, _secondHand, WebYankForward);
-            tracker.TrackGesture(tracker, _secondHand.controllerPosition, v => v.y, state.pullThreshold, _secondHand, WebYankUp);
-        }
+        if (_firstHand != null) _firstHand.DrawWeb();
+        if (_secondHand != null) _secondHand.DrawWeb();
     }
 
     public override void FixedUpdate(MovementStateMachineManager state)
     {
-        
+        HandleControllerInput(state);
     }
 
     public override void OnCollisionEnter(MovementStateMachineManager state)
     {
         
-    }
-
-    private void HandleSecondHand(MovementStateMachineManager state, SwingHand hand)
-    {
-        _secondHand = hand;
-        StartSwing(state, hand);
     }
 
     private void StartSwing(MovementStateMachineManager state, SwingHand hand)
@@ -87,6 +69,21 @@ public class SwingingState : MovementAbstractState
         if (hand == _secondHand) _secondHand = null;
     }
 
+    private void HandleControllerInput(MovementStateMachineManager state)
+    {
+        if (_firstHand != null) 
+        {
+            _firstHand.trackerZ.TrackGesture(_firstHand.controllerPosition, v => v.z, state.pullThreshold, _firstHand, WebYankForward);
+            _firstHand.trackerY.TrackGesture(_firstHand.controllerPosition, v => v.y, state.pullThreshold, _firstHand, WebYankUp);        
+        }
+
+        if (_secondHand != null) 
+        {
+            _secondHand.trackerZ.TrackGesture(_secondHand.controllerPosition, v => v.z, state.pullThreshold, _secondHand, WebYankForward);
+            _secondHand.trackerY.TrackGesture(_secondHand.controllerPosition, v => v.y, state.pullThreshold, _secondHand, WebYankUp);
+        }
+    }
+
     private void WebYankForward(SwingHand hand)
     {
         if (!hand.joint) return;
@@ -109,6 +106,19 @@ public class SwingingState : MovementAbstractState
         manager.playerRb.AddForce(Vector3.up * hand.yankForce, ForceMode.VelocityChange);
     }
 
+    private void HandleSecondTriggerPessed(MovementStateMachineManager state, SwingHand hand)
+    {
+        if (hand.onWall)
+        {
+            StopSwing(_firstHand);
+            state.pendingHand = hand;
+            state.SwitchState(state.ClimbingState);
+            return;
+        }
+        
+        _secondHand = hand;
+        StartSwing(state, hand);
+    }
 
     // Transition Logic 
     private void HandleSwingReleased(MovementStateMachineManager state, SwingHand hand)
@@ -118,5 +128,3 @@ public class SwingingState : MovementAbstractState
         if (_firstHand == null && _secondHand == null) state.SwitchState(state.IdleState);
     }
 }
-
-

@@ -8,7 +8,7 @@ public class GestureTracker
     private Vector3 _gestureStartPosition;
     private Vector3 _lastPosition;
 
-    public void TrackGesture(GestureTracker tracker, Vector3 controllerPosition, Func<Vector3, float> axisSelector, float pullThreshold, SwingHand hand, Action<SwingHand> PullWeb)
+    public void TrackGesture(Vector3 controllerPosition, Func<Vector3, float> axisSelector, float pullThreshold, SwingHand hand, Action<SwingHand> PullWeb)
     {
         Vector3 currentPosition = controllerPosition;
         Vector3 positionDelta = currentPosition - _lastPosition;
@@ -28,7 +28,7 @@ public class GestureTracker
             {
                 PullWeb?.Invoke(hand);
                 _gestureStarted = false;
-                _lastPosition = Vector3.zero;
+                _lastPosition = currentPosition;
                 return;
             }
             

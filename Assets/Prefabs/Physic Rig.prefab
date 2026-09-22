@@ -9,9 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6255477846298827111}
-  - component: {fileID: 4163787598710489173}
-  - component: {fileID: 2787855004191565628}
-  - component: {fileID: 2565914681307524219}
+  - component: {fileID: 3776281832664329000}
+  - component: {fileID: 341282358192839792}
   m_Layer: 6
   m_Name: Physic Rig
   m_TagString: Untagged
@@ -38,7 +37,7 @@ Transform:
   - {fileID: 8875393708430247321}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4163787598710489173
+--- !u!114 &3776281832664329000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,24 +46,139 @@ MonoBehaviour:
   m_GameObject: {fileID: 323777532518995551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82b3bf6e4800e624b82844279a72ef1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 111a2f8e64451b740bb0445d1907f647, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TriggerColliderController
-  _playerTriggerCollider: {fileID: 2995891003876817092}
-  _bodyHeightMin: 0.5
-  _bodyHeightMax: 5
---- !u!114 &2787855004191565628
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 323777532518995551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf9b827fbd567b548b69dcf491e9d795, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ColliderController
+  m_EditorClassIdentifier: Assembly-CSharp::MovementStateMachineManager
+  moveInput:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Move Input
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 88669eb2-3dde-496f-8a28-61e8a42ed9e7
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  leftHand:
+    swingWebInput:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Swing Web Input
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 2d6f7c81-1948-4bfd-b6c9-c90a426c48cb
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerDelta:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Controller Delta
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 6fbb3211-7e5d-4bb9-a027-1182f253a55c
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -1121338008654915040, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerPosition: {x: 0, y: 0, z: 0}
+    hand: {fileID: 8003649307976600970}
+    swingPointVisual: {fileID: 7712329808817034277}
+    joint: {fileID: 0}
+    hasHit: 0
+    isSwinging: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 60
+    pointOffset: 2
+    line: {fileID: 1980999006466032510}
+    springStrength: 12
+    jointDamper: 7
+    jointMassScale: 4
+    yankForce: 50
+  rightHand:
+    swingWebInput:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Swing Web Input
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: a7761481-0ac8-4bd0-bd74-704f495d3dc1
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerDelta:
+      m_UseReference: 1
+      m_Action:
+        m_Name: Controller Delta
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 3845ecbb-d9fe-4d3b-a172-abac28ed0db0
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: -3009159214596158414, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    controllerPosition: {x: 0, y: 0, z: 0}
+    hand: {fileID: 8075641630687500425}
+    swingPointVisual: {fileID: 6344175271530996692}
+    joint: {fileID: 0}
+    hasHit: 0
+    isSwinging: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 60
+    pointOffset: 2
+    line: {fileID: 328241652987959007}
+    springStrength: 12
+    jointDamper: 7
+    jointMassScale: 4
+    yankForce: 50
+  pendingHand:
+    swingWebInput:
+      m_UseReference: 0
+      m_Action:
+        m_Name: 
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 2ca14105-c027-4493-941c-b186a6c92047
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+    controllerDelta:
+      m_UseReference: 0
+      m_Action:
+        m_Name: 
+        m_Type: 0
+        m_ExpectedControlType: 
+        m_Id: 29dab2cc-8712-4471-9042-b184c5a00c51
+        m_Processors: 
+        m_Interactions: 
+        m_SingletonActionBindings: []
+        m_Flags: 0
+      m_Reference: {fileID: 0}
+    controllerPosition: {x: 0, y: 0, z: 0}
+    hand: {fileID: 0}
+    swingPointVisual: {fileID: 0}
+    joint: {fileID: 0}
+    hasHit: 0
+    isSwinging: 0
+    anchorPoint: {x: 0, y: 0, z: 0}
+    maxWebShootDistance: 0
+    pointOffset: 0
+    line: {fileID: 0}
+    springStrength: 0
+    jointDamper: 0
+    jointMassScale: 0
+    yankForce: 0
+  pullThreshold: 0.2
   _bodyHeightMin: 0.5
   _bodyHeightMax: 5
   _leftHand: {fileID: 8003649307976600970}
@@ -72,7 +186,11 @@ MonoBehaviour:
   _headjoint: {fileID: 5958399057766580125}
   _leftHandJoint: {fileID: 6792402992950892797}
   _rightHandJoint: {fileID: 2959600668541181349}
---- !u!114 &2565914681307524219
+  playerRb: {fileID: 0}
+  lookDirection: {fileID: 0}
+  moveInputValue: {x: 0, y: 0}
+  speed: 5
+--- !u!114 &341282358192839792
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,35 +199,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 323777532518995551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7d4094ba5608554db6bfa0bb7cab232, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c418587acfe8a740b18b43969cd5d7c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 2
-  sensitivity: 120
-  moveInput:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Move Input
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ed9c58d0-318f-4319-a473-514072a67584
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLookControls
   lookInput:
     m_UseReference: 1
     m_Action:
       m_Name: Look Input
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: e6e6dd06-84bd-42b6-825b-9f01d3a17973
+      m_Id: 100008ac-ba5f-4e9f-9f4f-67faa1ccc30b
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: -6493913391331992944, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  sensitivity: 120
 --- !u!1 &666695490926263645
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +655,7 @@ Transform:
   m_GameObject: {fileID: 1669563979711334644}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.803, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -896,76 +1001,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &2635177238825785319
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 979149344500924676}
-  - component: {fileID: 2995891003876817092}
-  - component: {fileID: 534419382721401488}
-  m_Layer: 0
-  m_Name: Body Trigger Collider
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &979149344500924676
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2635177238825785319}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 940579086427821788}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &2995891003876817092
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2635177238825785319}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.3
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &534419382721401488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2635177238825785319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c566a00c695729642af0513a7290f786, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBarController
-  healthBar: {fileID: 6845301535839159791}
-  health: 100
 --- !u!1 &2675960010737526191
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,7 +1280,7 @@ Transform:
   m_GameObject: {fileID: 4087131722966997136}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.803, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1332,7 +1367,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5718885505714854373}
-  - component: {fileID: 3221072796922974956}
   - component: {fileID: 8889253645344863018}
   m_Layer: 0
   m_Name: 'Web Slinger '
@@ -1358,51 +1392,6 @@ Transform:
   - {fileID: 7104620086682140336}
   m_Father: {fileID: 8075641630687500425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3221072796922974956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4353571470934220942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a7a951c27cb6b4bb4f5c385eb88ac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SwingProtocol
-  swingHand: {fileID: 5718885505714854373}
-  _playerRb: {fileID: 8946046260323916024}
-  maxWebShootDistance: 60
-  jointSpring: 4.5
-  jointDamper: 7
-  jointMassScale: 4.5
-  swingPointVisual: {fileID: 6344175271530996692}
-  swingAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Swing
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 032f9d3b-2493-4639-af2a-e1dcd83b7399
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Pull
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec941ade-86d6-4573-918a-ba571175a474
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: 187161793506945269, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullStrength: 500
-  line: {fileID: 328241652987959007}
 --- !u!114 &8889253645344863018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1796,7 +1785,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2108309425908254554}
-  - component: {fileID: 1429423796458191181}
   - component: {fileID: 3367363784383325831}
   m_Layer: 6
   m_Name: Web Slinger
@@ -1822,51 +1810,6 @@ Transform:
   - {fileID: 1164448149227485803}
   m_Father: {fileID: 8003649307976600970}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1429423796458191181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5957367327955533798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a7a951c27cb6b4bb4f5c385eb88ac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SwingProtocol
-  swingHand: {fileID: 2108309425908254554}
-  _playerRb: {fileID: 8946046260323916024}
-  maxWebShootDistance: 60
-  jointSpring: 4.5
-  jointDamper: 7
-  jointMassScale: 4.5
-  swingPointVisual: {fileID: 7712329808817034277}
-  swingAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Swing
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 032f9d3b-2493-4639-af2a-e1dcd83b7399
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -5982496924579745919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullAction:
-    m_UseReference: 1
-    m_Action:
-      m_Name: Pull
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: ec941ade-86d6-4573-918a-ba571175a474
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    m_Reference: {fileID: -6131295136447488360, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  pullStrength: 500
-  line: {fileID: 1980999006466032510}
 --- !u!114 &3367363784383325831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1980,7 +1923,6 @@ Transform:
   m_Children:
   - {fileID: 2094119965210149378}
   - {fileID: 8036142890040106272}
-  - {fileID: 979149344500924676}
   m_Father: {fileID: 6255477846298827111}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6096631911246027539
@@ -2052,7 +1994,7 @@ GameObject:
   - component: {fileID: 4776960655244066219}
   - component: {fileID: 6931704905244141078}
   m_Layer: 6
-  m_Name: Hand Collider
+  m_Name: Head Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2269,7 +2211,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2440,7 +2382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
   m_RenderShadows: 1
-  m_RequiresDepthTextureOption: 2
+  m_RequiresDepthTextureOption: 1
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []

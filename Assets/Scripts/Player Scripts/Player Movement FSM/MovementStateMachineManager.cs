@@ -11,8 +11,7 @@ public class MovementStateMachineManager : MonoBehaviour
     public SwingHand leftHand;
     public SwingHand rightHand;
     public SwingHand pendingHand;
-    public float pullThreshold;
-    
+    public float pullThreshold;    
 
     // VR Rig Components
     [SerializeField] float _bodyHeightMin;
@@ -32,6 +31,9 @@ public class MovementStateMachineManager : MonoBehaviour
 
     // Multipliers
     public float speed;
+    public float vaultForce;
+
+    // Condition Flags
 
     // Private Global Variables
     private bool _wasMoving;
@@ -41,39 +43,51 @@ public class MovementStateMachineManager : MonoBehaviour
     public IdleState IdleState = new IdleState();
     public GroundMovementState GroundMovementState = new GroundMovementState();
     public SwingingState SwingingState = new SwingingState();
+    public ClimbingState ClimbingState = new ClimbingState();
+    public AirState AirState = new AirState();
 
     // Context Delegates
     public event Action<MovementStateMachineManager> OnMovementStart;
     public event Action<MovementStateMachineManager> OnMovementStop; 
-    public event Action<MovementStateMachineManager, SwingHand> OnSwingWebStart;
-    public event Action<MovementStateMachineManager, SwingHand> OnSwingWebStop;
+    public event Action<MovementStateMachineManager, SwingHand> OnTriggerStart;
+    public event Action<MovementStateMachineManager, SwingHand> OnTriggerStop;
 
     // Input Events
+    private Action<InputAction.CallbackContext> _leftControllerMovement;
+    private Action<InputAction.CallbackContext> _rightControllerMovement;
+
+    private Action<InputAction.CallbackContext> _leftTriggerInput;
+    private Action<InputAction.CallbackContext> _rightTriggerInput;
+
     void OnEnable()
     {
         moveInput.action.performed += OnMovePerfomred;
         moveInput.action.canceled += OnMoveCanceled;
 
-        leftHand.swingWebInput.action.performed += ctx => OnSwingPerformed(ctx, leftHand);
-        rightHand.swingWebInput.action.performed += ctx => OnSwingPerformed(ctx, rightHand);
-        leftHand.swingWebInput.action.canceled += ctx => OnSwingPerformed(ctx, leftHand);
-        rightHand.swingWebInput.action.canceled  += ctx => OnSwingPerformed(ctx, rightHand);
-        
-        leftHand.controllerDelta.action.performed += ctx => OnMovementDetected(ctx, leftHand);
-        rightHand.controllerDelta.action.performed += ctx => OnMovementDetected(ctx, rightHand);
+        _leftControllerMovement = ctx => OnControllerMovement(ctx, leftHand);
+        _rightControllerMovement = ctx => OnControllerMovement(ctx, rightHand);
+        leftHand.controllerDelta.action.performed += _leftControllerMovement;
+        rightHand.controllerDelta.action.performed += _rightControllerMovement;
+
+        _leftTriggerInput = ctx => OnTriggerPerformed(ctx, leftHand);
+        _rightTriggerInput = ctx => OnTriggerPerformed(ctx, rightHand);
+        leftHand.triggerInput.action.performed += _leftTriggerInput;
+        rightHand.triggerInput.action.performed += _rightTriggerInput;
+        leftHand.triggerInput.action.canceled += _leftTriggerInput;
+        rightHand.triggerInput.action.canceled  += _rightTriggerInput;
     } 
     void OnDisable()
     {
         moveInput.action.performed -= OnMovePerfomred;
         moveInput.action.canceled -= OnMoveCanceled;
 
-        leftHand.swingWebInput.action.performed -= ctx => OnSwingPerformed(ctx, leftHand);
-        rightHand.swingWebInput.action.performed -= ctx => OnSwingPerformed(ctx, rightHand);
-        leftHand.swingWebInput.action.canceled -= ctx => OnSwingPerformed(ctx, leftHand);
-        rightHand.swingWebInput.action.canceled  -= ctx => OnSwingPerformed(ctx, rightHand);
+        leftHand.controllerDelta.action.performed -= _leftControllerMovement;
+        rightHand.controllerDelta.action.performed -= _rightControllerMovement;
 
-        leftHand.controllerDelta.action.performed -= ctx => OnMovementDetected(ctx, leftHand);
-        rightHand.controllerDelta.action.performed -= ctx => OnMovementDetected(ctx, rightHand);
+        leftHand.triggerInput.action.performed -= _leftTriggerInput;
+        rightHand.triggerInput.action.performed -= _rightTriggerInput;
+        leftHand.triggerInput.action.canceled -= _leftTriggerInput;
+        rightHand.triggerInput.action.canceled  -= _rightTriggerInput;
     } 
 
     // Unity Event Functions
@@ -99,8 +113,8 @@ public class MovementStateMachineManager : MonoBehaviour
 
         ConditonUpdates();
 
-        leftHand.ShowAnchorPoint(leftHand);
-        rightHand.ShowAnchorPoint(rightHand);
+        leftHand.ShowAnchorPoint();
+        rightHand.ShowAnchorPoint();
     }
 
     void FixedUpdate()
@@ -126,6 +140,11 @@ public class MovementStateMachineManager : MonoBehaviour
         if (!_wasMoving && isMoving) OnMovementStart?.Invoke(this);
 
         _wasMoving = isMoving;
+
+        leftHand.ShowAnchorPoint();
+        rightHand.ShowAnchorPoint();
+        leftHand.OnWall();
+        rightHand.OnWall();
     }
 
     // VR Rig Functions
@@ -155,20 +174,19 @@ public class MovementStateMachineManager : MonoBehaviour
         moveInputValue = Vector2.zero;
     } 
 
-    private void OnSwingPerformed(InputAction.CallbackContext input, SwingHand hand)
+    private void OnTriggerPerformed(InputAction.CallbackContext input, SwingHand hand)
     {
-        if (input.ReadValueAsButton()) {
-            hand.isSwinging = true;
-            OnSwingWebStart?.Invoke(this, hand);
+        if (input.ReadValueAsButton()) 
+        {
+            OnTriggerStart?.Invoke(this, hand);
         }
         else
         {
-            hand.isSwinging = false;
-            OnSwingWebStop?.Invoke(this, hand);
+            OnTriggerStop?.Invoke(this, hand);
         }    
     }
 
-    private void OnMovementDetected(InputAction.CallbackContext input, SwingHand hand)
+    private void OnControllerMovement(InputAction.CallbackContext input, SwingHand hand)
     {
         hand.controllerPosition = input.ReadValue<Vector3>();
     }

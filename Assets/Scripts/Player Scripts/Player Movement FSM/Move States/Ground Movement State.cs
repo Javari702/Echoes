@@ -6,7 +6,7 @@ public class GroundMovementState : MovementAbstractState
     {
         Debug.Log("Entering Ground Movement State");
 
-        state.OnSwingWebStart += HandleSwingPressed;
+        state.OnTriggerStart += HandleSwingPressed;
         state.OnMovementStop += HandleMovementStop;
     }
 
@@ -14,7 +14,7 @@ public class GroundMovementState : MovementAbstractState
     {
         Debug.Log("Exiting Ground Movement State");
 
-        state.OnSwingWebStart -= HandleSwingPressed;
+        state.OnTriggerStart -= HandleSwingPressed;
         state.OnMovementStop -= HandleMovementStop;
     }
 
@@ -48,7 +48,14 @@ public class GroundMovementState : MovementAbstractState
     private void HandleSwingPressed(MovementStateMachineManager state, SwingHand hand)
     {
         state.pendingHand = hand;
-        state.SwitchState(state.SwingingState);
+        
+        if (!hand.onWall)
+        {
+            state.SwitchState(state.SwingingState);
+            return;            
+        }
+        
+        state.SwitchState(state.ClimbingState);
     }
 
     private void HandleMovementStop(MovementStateMachineManager state)
