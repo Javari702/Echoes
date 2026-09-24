@@ -61,6 +61,7 @@ public class SwingingState : MovementAbstractState
 
     private void StopSwing(SwingHand hand)
     {
+        hand.isSwinging = false;
         if (hand.joint != null) Object.Destroy(hand.joint);
 
         hand.DrawWebStop();
@@ -110,14 +111,31 @@ public class SwingingState : MovementAbstractState
     {
         if (hand.onWall)
         {
-            StopSwing(_firstHand);
+            if (_firstHand != null) 
+            {
+                StopSwing(_firstHand);
+            }
+            else
+            {
+                StopSwing(_secondHand);
+            }
+
             state.pendingHand = hand;
+            hand.isSwinging = false;
             state.SwitchState(state.ClimbingState);
             return;
         }
-        
-        _secondHand = hand;
-        StartSwing(state, hand);
+
+        if (_firstHand == null)
+        {
+            _firstHand = hand;
+            StartSwing(state, _firstHand);
+        }
+        else
+        {
+            _secondHand = hand;  
+            StartSwing(state, _secondHand);
+        }
     }
 
     // Transition Logic 
@@ -125,6 +143,10 @@ public class SwingingState : MovementAbstractState
     {
         StopSwing(hand);
 
-        if (_firstHand == null && _secondHand == null) state.SwitchState(state.IdleState);
+        if (_firstHand == null && _secondHand == null && state.isInAir) state.SwitchState(state.AirState);
+
+        if (_firstHand == null && _secondHand == null && state.isGrounded) state.SwitchState(state.IdleState);
     }
+
+
 }

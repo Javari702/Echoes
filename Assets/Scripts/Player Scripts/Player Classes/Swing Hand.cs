@@ -27,6 +27,7 @@ public class SwingHand
     public float springStrength;
     public float jointDamper;
     public float jointMassScale;
+    public bool isSwinging;
 
     // Tracking Controller Position Components
     public GestureTracker trackerZ = new GestureTracker();

@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class IdleState : MovementAbstractState
@@ -41,6 +40,7 @@ public class IdleState : MovementAbstractState
 
         if (!hand.onWall)
         {
+            hand.isSwinging = true;
             state.SwitchState(state.SwingingState);
             return;            
         }

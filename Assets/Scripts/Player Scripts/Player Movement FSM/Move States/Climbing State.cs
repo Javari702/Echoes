@@ -15,12 +15,12 @@ public class ClimbingState : MovementAbstractState
 
         // state.OnSwingWebStart += HandleSwingPressed;
         // state.OnMovementStop += HandleMovementStop;
-        state.OnTriggerStart += HandleSecondHand;
+        state.OnTriggerStart += HandleSecondTiggerPressed;
         state.OnTriggerStop += HandleTriggerStop;
 
         _firstHand = state.pendingHand;
 
-        if (_firstHand != null) _firstHand.FindWallAnchor(_firstHand, HandleWallClimbStart);
+        if (_firstHand != null) _firstHand.FindWallAnchor(_firstHand, StartClimb);
     }
 
     public override void ExitState(MovementStateMachineManager state)
@@ -29,13 +29,13 @@ public class ClimbingState : MovementAbstractState
 
         // state.OnSwingWebStart -= HandleSwingPressed;
         // state.OnMovementStop -= HandleMovementStop;
-        state.OnTriggerStart -= HandleSecondHand;
+        state.OnTriggerStart -= HandleSecondTiggerPressed;
         state.OnTriggerStop -= HandleTriggerStop;
     }
 
     public override void UpdateState(MovementStateMachineManager state)
     {
-        
+        // Debug.DrawRay();
     }
 
     public override void FixedUpdate(MovementStateMachineManager state)
@@ -48,7 +48,7 @@ public class ClimbingState : MovementAbstractState
         
     }
 
-    private void HandleWallClimbStart(SwingHand hand)
+    private void StartClimb(SwingHand hand)
     {
         if (hand.wallCollider == null) return;
 
@@ -64,72 +64,84 @@ public class ClimbingState : MovementAbstractState
         hand.joint.damper = 500f;
     }
 
-    private void HandleWallClimbStop(SwingHand hand) 
+    private void StopClimb(SwingHand hand) 
     {
         Object.Destroy(hand.joint);
+
+        if (hand == _firstHand) _firstHand = null;
+        if (hand == _secondHand) _secondHand = null;
     }
 
-    private void VaultUp(SwingHand hand)
+    private void VaultOver(SwingHand hand)
     {
-        _manager.playerRb.AddForce(Vector3.up * _manager.vaultForce, ForceMode.Impulse);
+        Debug.Log("Function Called");
+
+        StopClimb(hand);
+
+        _manager.playerRb.AddForce(Vector3.up * 20f, ForceMode.VelocityChange);
+
+        if (_firstHand == null && _secondHand == null) _manager.SwitchState(_manager.IdleState);
     }
 
     private void HandleVaulting(MovementStateMachineManager state)
     {
         if (_firstHand == null || _secondHand == null) return; 
-            
+
         float firstHandToRoofDistance = _firstHand.wallCollider.bounds.max.y - _firstHand.wallCollider.ClosestPoint(_firstHand.climbHand.transform.position).y;
-        float secondHandToRoofDistance = _secondHand.wallCollider.bounds.max.y - _secondHand.wallCollider.ClosestPoint(_secondHand.climbHand.transform.position).y;
+        float secondHandToRoofDistance = _secondHand.wallCollider.bounds.max.y - _secondHand.wallCollider.ClosestPoint(_secondHand.climbHand.transform.position).y;   
 
-        if (firstHandToRoofDistance > 0.5f || secondHandToRoofDistance > 0.1f ) {
-            Debug.Log("false");
-            return;
-        }   
+        if (_firstHand.wallCollider != _secondHand.wallCollider) return;
 
-        HandleWallClimbStop(_firstHand);
-        HandleWallClimbStop(_secondHand);
+        float wallPeak = _firstHand.wallCollider.bounds.max.y;
+        float wallBottom = _firstHand.wallCollider.bounds.min.y;
+        float leftHandPosition = Mathf.InverseLerp(wallBottom, wallPeak, _firstHand.climbHand.GetComponentInChildren<Collider>().bounds.min.y);
+        float rightHandPosition = Mathf.InverseLerp(wallBottom, wallPeak, _secondHand.climbHand.GetComponentInChildren<Collider>().bounds.min.y);
 
-        _firstHand.trackerY.TrackGesture(_firstHand.controllerPosition, v => v.y, state.pullThreshold, _firstHand, VaultUp);        
-        _secondHand.trackerY.TrackGesture(_secondHand.controllerPosition, v => v.y, state.pullThreshold, _secondHand, VaultUp);
-
-        state.SwitchState(state.IdleState);        
+        if (leftHandPosition > 0.94f && rightHandPosition > 0.94f) 
+        {
+            _firstHand.trackerY.TrackGesture(_firstHand.controllerPosition, v => v.y, 0.4f, _firstHand, VaultOver);        
+            _secondHand.trackerY.TrackGesture(_secondHand.controllerPosition, v => v.y, 0.4f, _secondHand, VaultOver);
+        }
     }
 
-    private void HandleSecondHand(MovementStateMachineManager state, SwingHand hand)
+    private void HandleSecondTiggerPressed(MovementStateMachineManager state, SwingHand hand)
     {
         if (!hand.onWall)
         {
-            HandleWallClimbStop(_firstHand);
+            if (_firstHand != null) 
+            {
+                StopClimb(_firstHand);
+            }
+            else
+            {
+                StopClimb(_secondHand);
+            }
+
             state.pendingHand = hand;
-            state.SwitchState(state.ClimbingState);
+            hand.isSwinging = true;
+            state.SwitchState(state.SwingingState);
             return;
         }
 
-        _secondHand = hand;
-
-        if (_secondHand != null) _secondHand.FindWallAnchor(_secondHand, HandleWallClimbStart);
+        if (_firstHand == null)
+        {
+            _firstHand = hand;
+            _firstHand.FindWallAnchor(_firstHand, StartClimb);
+        }
+        else
+        {
+            _secondHand = hand;  
+            _secondHand.FindWallAnchor(_secondHand, StartClimb);          
+        }
     }
 
     // Transition Logic
     private void HandleTriggerStop(MovementStateMachineManager state, SwingHand hand)
     {
-        HandleWallClimbStop(hand);
+        StopClimb(hand);
 
-        if (hand == _firstHand) _firstHand = null;
-        if (hand == _secondHand) _secondHand = null;
+        if (_firstHand == null && _secondHand == null && state.isGrounded) state.SwitchState(state.IdleState);
 
-        if (_firstHand == null && _secondHand == null) state.SwitchState(state.IdleState);
+        if (_firstHand == null && _secondHand == null && state.isInAir) state.SwitchState(state.AirState);
     }
-
-    // private void HandleSwingPressed(MovementStateMachineManager state, SwingHand hand)
-    // {
-
-    //     state.pendingHand = hand;
-    //     state.SwitchState(state.SwingingState);
-    // }
-
-    // private void HandleMovementStop(MovementStateMachineManager state)
-    // {
-    //     state.SwitchState(state.IdleState);
-    // }
 }

@@ -1,16 +1,54 @@
 using UnityEngine;
 
-public class AirState : MonoBehaviour
+public class AirState : MovementAbstractState
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void EnterState(MovementStateMachineManager state)
+    {
+        Debug.Log("Entering Air State");   
+
+        state.OnTriggerStart += HandleTriggerPressed;
+        state.OnMovementStart += HandleMovementStart;
+    }
+
+    public override void ExitState(MovementStateMachineManager state)
+    {
+        Debug.Log("Exiting Air State");
+
+        state.OnTriggerStart -= HandleTriggerPressed;
+        state.OnMovementStart += HandleMovementStart;
+    }
+
+    public override void UpdateState(MovementStateMachineManager state)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdate(MovementStateMachineManager state)
     {
         
+    }
+
+    public override void OnCollisionEnter(MovementStateMachineManager state)
+    {
+        
+    }
+
+    private void HandleTriggerPressed(MovementStateMachineManager state, SwingHand hand)
+    {
+        state.pendingHand = hand;
+
+        if (!hand.onWall)
+        {
+            hand.isSwinging = true;
+            state.SwitchState(state.SwingingState);
+            return;            
+        }
+
+        state.SwitchState(state.ClimbingState);
+    }
+
+    private void HandleMovementStart(MovementStateMachineManager state)
+    {
+        state.SwitchState(state.GroundMovementState);
     }
 }

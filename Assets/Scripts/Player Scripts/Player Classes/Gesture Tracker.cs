@@ -8,7 +8,7 @@ public class GestureTracker
     private Vector3 _gestureStartPosition;
     private Vector3 _lastPosition;
 
-    public void TrackGesture(Vector3 controllerPosition, Func<Vector3, float> axisSelector, float pullThreshold, SwingHand hand, Action<SwingHand> PullWeb)
+    public void TrackGesture(Vector3 controllerPosition, Func<Vector3, float> axisSelector, float pullThreshold, SwingHand hand, Action<SwingHand> ActivateFunction)
     {
         Vector3 currentPosition = controllerPosition;
         Vector3 positionDelta = currentPosition - _lastPosition;
@@ -26,7 +26,7 @@ public class GestureTracker
 
             if (_pullDistance > pullThreshold)
             {
-                PullWeb?.Invoke(hand);
+                ActivateFunction?.Invoke(hand);
                 _gestureStarted = false;
                 _lastPosition = currentPosition;
                 return;

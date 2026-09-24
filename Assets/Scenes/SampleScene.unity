@@ -1948,8 +1948,16 @@ PrefabInstance:
       value: Physic Rig
       objectReference: {fileID: 0}
     - target: {fileID: 3776281832664329000, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: airSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3776281832664329000, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: vaultForce
-      value: 100
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3776281832664329000, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
+      propertyPath: groundSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3776281832664329000, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: pushToWallForce
@@ -2017,15 +2025,15 @@ PrefabInstance:
       objectReference: {fileID: 13400000, guid: 6a8a723834f3af24295c317a24d263f2, type: 2}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.4473505
+      value: 1.7001286
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4
+      value: 21.871786
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.1584454
+      value: 21.35225
       objectReference: {fileID: 0}
     - target: {fileID: 6255477846298827111, guid: 45c3b8b2696d80c4cb1eabf9bc2430ef, type: 3}
       propertyPath: m_LocalRotation.w

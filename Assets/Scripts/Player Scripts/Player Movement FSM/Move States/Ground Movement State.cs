@@ -38,7 +38,7 @@ public class GroundMovementState : MovementAbstractState
         Quaternion yaw = Quaternion.Euler(0, state.lookDirection.eulerAngles.y, 0);
         Vector3 targetDirection = yaw * new Vector3(state.moveInputValue.x, 0f, state.moveInputValue.y);
 
-        Vector3 moveDirection = state.playerRb.position + targetDirection * Time.fixedDeltaTime * state.speed;
+        Vector3 moveDirection = state.playerRb.position + targetDirection * Time.fixedDeltaTime * (state.isInAir? state.airSpeed : state.groundSpeed);
         Vector3 newPositon = (moveDirection - state.lookDirection.position) + state.lookDirection.position;
 
         state.playerRb.MovePosition(newPositon);
@@ -51,6 +51,7 @@ public class GroundMovementState : MovementAbstractState
         
         if (!hand.onWall)
         {
+            hand.isSwinging = true;
             state.SwitchState(state.SwingingState);
             return;            
         }

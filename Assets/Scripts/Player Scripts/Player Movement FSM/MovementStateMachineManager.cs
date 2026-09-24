@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,10 +31,13 @@ public class MovementStateMachineManager : MonoBehaviour
     public Vector2 moveInputValue;
 
     // Multipliers
-    public float speed;
+    public float groundSpeed;
+    public float airSpeed;
     public float vaultForce;
 
     // Condition Flags
+    public bool isGrounded;
+    public bool isInAir;
 
     // Private Global Variables
     private bool _wasMoving;
@@ -134,17 +138,40 @@ public class MovementStateMachineManager : MonoBehaviour
 
     private void ConditonUpdates()
     {
+        IsMoving();
+
+        IsGround();
+
+        IsAir(leftHand, rightHand);
+
+        leftHand.ShowAnchorPoint();
+        rightHand.ShowAnchorPoint();
+
+        leftHand.OnWall();
+        rightHand.OnWall();
+    }
+
+    private void IsMoving()
+    {
         bool isMoving = moveInputValue.magnitude > 0.01f; 
 
         if (_wasMoving && !isMoving) OnMovementStop?.Invoke(this);
         if (!_wasMoving && isMoving) OnMovementStart?.Invoke(this);
 
         _wasMoving = isMoving;
+    }
 
-        leftHand.ShowAnchorPoint();
-        rightHand.ShowAnchorPoint();
-        leftHand.OnWall();
-        rightHand.OnWall();
+    private void IsGround()
+    {
+        Vector3 position = playerRb.transform.position;
+        float radius = 0.5f;
+        
+        isGrounded = Physics.CheckSphere(position, radius);
+    }
+
+    private void IsAir(SwingHand handOne, SwingHand handTwo)
+    {
+        isInAir = !isGrounded && !handOne.onWall && !handTwo.onWall && !handOne.isSwinging && !handTwo.isSwinging; 
     }
 
     // VR Rig Functions
